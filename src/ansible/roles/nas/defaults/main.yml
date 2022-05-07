@@ -2,3 +2,5 @@
 hhwm_packages:
 - samba
 - samba-common-bin
+
+- nfs-kernel-server

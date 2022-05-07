@@ -8,3 +8,8 @@
   service:
     name: nmbd
     state: restarted
+
+- name: restart nfs
+  service:
+    name: nfs-kernel-server
+    state: restarted

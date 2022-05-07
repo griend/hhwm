@@ -1,0 +1,16 @@
+---
+- name: share | /srv/share/public 
+  file:
+    path: /srv/share/public
+    state: directory
+    owner: root
+    group: users
+    mode: '0777'
+
+- name: share | /srv/share/cees 
+  file:
+    path: /srv/share/cees
+    state: directory
+    owner: cees
+    group: cees
+    mode: '0700'

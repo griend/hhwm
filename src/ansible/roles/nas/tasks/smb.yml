@@ -1,20 +1,4 @@
 ---
-- name: smb | /srv/share/public 
-  file:
-    path: /srv/share/public
-    state: directory
-    owner: root
-    group: users
-    mode: '0775'
-
-- name: smb | /srv/share/cees 
-  file:
-    path: /srv/share/cees
-    state: directory
-    owner: cees
-    group: cees
-    mode: '0700'
-
 - name: smb | /etc/samba/smb.conf
   template:
     src: smb/smb.conf.j2
