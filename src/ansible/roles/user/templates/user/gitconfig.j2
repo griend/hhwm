@@ -1,0 +1,17 @@
+{{ ansible_managed | comment }}
+
+[user]
+	name = {{ hhwm_comment }}
+	email = {{ hhwm_email }}
+	signingkey = {{ hhwm_gpg_key }}
+[commit]
+	gpgsign = true
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true

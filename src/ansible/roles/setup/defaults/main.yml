@@ -1,0 +1,10 @@
+---
+hhwm_packages:
+- apt-transport-https
+- btrfs-progs
+- curl
+- git
+- gnupg2
+- htop
+- tmux
+- vim-nox

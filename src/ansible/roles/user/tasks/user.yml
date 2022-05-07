@@ -1,0 +1,112 @@
+---
+- name: user | create group
+  group:
+    name: "{{ hhwm_user }}"
+    state: present
+
+- name: user | create user
+  user:
+    name: "{{ hhwm_user }}"
+    group: "{{ hhwm_group }}"
+    groups:
+      - adm
+    append: true
+    state: present
+    comment: "{{ hhwm_comment }}"
+    shell: /usr/bin/zsh
+
+- name: user | ~/var/tmp
+  file:
+    path: "/home/{{ hhwm_user }}/var/tmp"
+    state: directory
+    owner: "{{ hhwm_user }}"
+    group: "{{ hhwm_group }}"
+    mode: '0700'
+
+- name: user | authorized key
+  authorized_key:
+    user: "{{ hhwm_user }}"
+    key: "{{ hhwm_ssh_key}}"
+    state: present
+
+- name: user | sudoerd.d
+  template:
+    src: user/sudo_adm.j2
+    dest: /etc/sudoers.d/adm
+    owner: root
+    group: root
+    mode: '0660'
+
+- name: user | .gitconfig
+  template:
+    src: user/gitconfig.j2
+    dest: "/home/{{ hhwm_user }}/.gitconfig"
+    owner: "{{ hhwm_user }}"
+    group: "{{ hhwm_group }}"
+    mode: '0600'
+
+- name: user | .ssh/config
+  template:
+    force: no
+    src: user/ssh_config.j2
+    dest: "/home/{{ hhwm_user }}/.ssh/config"
+    owner: "{{ hhwm_user }}"
+    group: "{{ hhwm_group }}"
+    mode: '0600'
+
+#
+# Import public GPG key
+#
+- name: user | check public GPG key
+  become: yes
+  become_user: "{{ hhwm_user }}"
+  command: "gpg2 --list-public-keys {{ hhwm_gpg_key }}"
+  register: gpg_public_key_exist
+  changed_when: false
+  ignore_errors: true
+
+- name: user | copy public GPG key
+  copy:
+    src: "secrets/gpg/{{ hhwm_email }}-public.asc"
+    dest: "/home/{{ hhwm_user }}/var/tmp/{{ hhwm_email }}-public.asc"
+    owner: "{{ hhwm_user }}"
+    group: "{{ hhwm_user }}"
+    mode: 0600
+  when: gpg_public_key_exist.rc != 0
+
+- name: user | import public GPG key
+  become: yes
+  become_user: "{{ hhwm_user }}"
+  command: gpg2 --import "/home/{{ hhwm_user }}/var/tmp/{{ hhwm_email }}-public.asc"
+  register: gpg_key_import
+  when: gpg_public_key_exist.rc != 0
+
+#
+# Import GPG trust
+#
+- name: user | create GPG trust
+  become: yes
+  become_user: "{{ hhwm_user }}"
+  shell: "gpg2 --export-ownertrust && echo {{ hhwm_gpg_key }}:6: > /home/{{ hhwm_user }}/var/tmp/trust.asc"
+  when: gpg_public_key_exist.rc != 0
+
+- name: user | import GPG trust
+  become: yes
+  become_user: "{{ hhwm_user }}"
+  command: gpg2 --import-ownertrust "/home/{{ hhwm_user }}/var/tmp/trust.asc"
+  when: gpg_public_key_exist.rc != 0
+
+#
+# Cleanup GPG
+#
+- name: user | delete public GPG key
+  file:
+    path: "/home/{{ hhwm_user }}/var/tmp/{{ hhwm_email }}-public.asc"
+    state: absent
+  when: gpg_public_key_exist.rc != 0
+
+- name: user | delete GPG trust
+  file:
+    path: "/home/{{ hhwm_user }}/var/tmp/trust.asc"
+    state: absent
+  when: gpg_public_key_exist.rc != 0

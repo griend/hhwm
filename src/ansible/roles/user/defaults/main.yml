@@ -1,0 +1,20 @@
+---
+hhwm_packages:
+- neofetch
+
+- python3
+- python3-pip
+- python3-psutil
+- python3-venv
+- python3-wheel
+
+- zsh
+- zsh-syntax-highlighting
+
+
+hhwm_user: cees
+hhwm_group: cees
+hhwm_comment: Cees van de Griend
+hhwm_email: cees@griend.eu
+hhwm_ssh_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPvNnUk4qfyrulUyB5e2U2NSBKD/DR1NILlfD5a3X2tq cees@griend.eu
+hhwm_gpg_key: 0AEFA422AC6CAA356728A4988C793245B8F69731

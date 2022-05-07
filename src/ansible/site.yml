@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tags: always
+  become: true
+
+  roles:
+  - setup
+  - user
+  

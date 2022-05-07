@@ -1,0 +1,67 @@
+---
+- name: zsh | .zsh.d
+  file:
+    path: "/home/{{ hhwm_user }}/.zsh.d/"
+    state: directory
+    owner: "{{ hhwm_user }}"
+    group: "{{ hhwm_group }}"
+    mode: '0700'
+
+- name: zsh | ~/.zshenv
+  template:
+    src: zsh/zshenv-home.j2
+    dest: "/home/{{ hhwm_user }}/.zshenv"
+    owner: "{{ hhwm_user }}"
+    group: "{{ hhwm_group }}"
+    mode: '0600'
+
+- name: zsh | .zshenv
+  template:
+    src: zsh/zshenv.j2
+    dest: "/home/{{ hhwm_user }}/.zsh.d/.zshenv"
+    owner: "{{ hhwm_user }}"
+    group: "{{ hhwm_group }}"
+    mode: '0600'
+
+- name: zsh | .zshrc
+  template:
+    src: zsh/zshrc.j2
+    dest: "/home/{{ hhwm_user }}/.zsh.d/.zshrc"
+    owner: "{{ hhwm_user }}"
+    group: "{{ hhwm_group }}"
+    mode: '0600'
+
+- name: zsh | .zprofile
+  template:
+    src: zsh/zprofile.j2
+    dest: "/home/{{ hhwm_user }}/.zsh.d/.zprofile"
+    owner: "{{ hhwm_user }}"
+    group: "{{ hhwm_group }}"
+    mode: '0600'
+
+- name: zsh | .zlogin
+  template:
+    src: zsh/zlogin.j2
+    dest: "/home/{{ hhwm_user }}/.zsh.d/.zlogin"
+    owner: "{{ hhwm_user }}"
+    group: "{{ hhwm_group }}"
+    mode: '0600'
+
+- name: zsh | .zlogout
+  template:
+    src: zsh/zlogout.j2
+    dest: "/home/{{ hhwm_user }}/.zsh.d/.zlogout"
+    owner: "{{ hhwm_user }}"
+    group: "{{ hhwm_group }}"
+    mode: '0600'
+
+- name: zsh | templates
+  template:
+    src: "{{ item }}"
+    dest: "/home/{{ hhwm_user }}/.zsh.d/{{ item | basename | splitext | first }}"
+    owner: "{{ hhwm_user }}"
+    group: "{{ hhwm_group }}"
+    mode: '0600'
+  with_fileglob:
+    - "../templates/zsh/[0-9][0-9]-*.j2"
+  
