@@ -1,0 +1,10 @@
+---
+- hosts: rp01.kade3.home
+  tags: always
+  become: true
+
+  roles:
+  - setup
+  - user
+  - nas
+

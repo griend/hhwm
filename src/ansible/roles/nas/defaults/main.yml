@@ -1,0 +1,4 @@
+---
+hhwm_packages:
+- samba
+- samba-common-bin
