@@ -24,6 +24,7 @@
 #======================= Global Settings =======================
 
 [global]
+  netbios name = {{ inventory_hostname.split(".")[0] | lower }}
 
 ## Browsing/Identification ###
 

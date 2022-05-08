@@ -1,0 +1,7 @@
+---
+hhwm_packages:
+- hostapd
+
+- dnsmasq
+- iptables-persistent
+- netfilter-persistent

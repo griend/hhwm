@@ -1,0 +1,57 @@
+---
+- include_tasks: packages.yml
+
+- name: dhcpcd
+  template:
+    src: dhcpcd.conf.j2
+    dest: /etc/dhcpcd.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart dhcpcd
+
+# enable IP forward
+- name: sysctl
+  template:
+    src: routed-ap.conf.j2
+    dest: /etc/sysctl.d/routed-ap.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: sysctl
+
+# sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+- name: iptables
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    out_interface: eth0
+    jump: MASQUERADE
+  notify: netfilter-persistent
+
+- name: dnsmasq
+  template:
+    src: dnsmasq.conf.j2
+    dest: /etc/dnsmasq.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart dnsmasq
+
+- name: hostapd.service
+  systemd:
+    name: hostapd
+    state: started
+    enabled: yes
+    masked: no
+    daemon_reload: yes
+
+- name: hostapd
+  template:
+    src: hostapd.conf.j2
+    dest: /etc/hostapd/hostapd.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart hostapd
+  
