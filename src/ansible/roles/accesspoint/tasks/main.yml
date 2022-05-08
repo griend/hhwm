@@ -1,7 +1,7 @@
 ---
 - include_tasks: packages.yml
 
-- name: dhcpcd
+- name: /etc/dhcpcd.conf
   template:
     src: dhcpcd.conf.j2
     dest: /etc/dhcpcd.conf
@@ -12,7 +12,7 @@
   - restart dhcpcd
 
 # enable IP forward
-- name: sysctl
+- name: /etc/sysctl.d/routed-ap.conf
   template:
     src: routed-ap.conf.j2
     dest: /etc/sysctl.d/routed-ap.conf
@@ -32,7 +32,7 @@
   notify:
   - netfilter-persistent
 
-- name: dnsmasq
+- name: /etc/dnsmasq.conf
   template:
     src: dnsmasq.conf.j2
     dest: /etc/dnsmasq.conf
@@ -42,7 +42,7 @@
   notify:
   - restart dnsmasq
 
-- name: dnsmasq.service
+- name: /etc/systemd/system/dnsmasq.service
   template:
     src: dnsmasq.service.j2
     dest: /etc/systemd/system/dnsmasq.service
@@ -59,12 +59,11 @@
     state: started
     enabled: yes
     masked: no
-    daemon_reload: yes
 
-- name: hostapd
+- name: /etc/hostapd/hostapd.conf
   template:
     src: hostapd.conf.j2
-    dest: /etc/hostapdhostapd.conf
+    dest: /etc/hostapd/hostapd.conf
     owner: root
     group: root
     mode: '0644'

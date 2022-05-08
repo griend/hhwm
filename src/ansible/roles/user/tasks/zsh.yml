@@ -1,5 +1,5 @@
 ---
-- name: zsh | .zsh.d
+- name: zsh | ~/.zsh.d
   file:
     path: "/home/{{ hhwm_user }}/.zsh.d/"
     state: directory
@@ -15,7 +15,7 @@
     group: "{{ hhwm_group }}"
     mode: '0600'
 
-- name: zsh | .zshenv
+- name: zsh | ~/.zsh.d/.zshenv
   template:
     src: zsh/zshenv.j2
     dest: "/home/{{ hhwm_user }}/.zsh.d/.zshenv"
@@ -23,7 +23,7 @@
     group: "{{ hhwm_group }}"
     mode: '0600'
 
-- name: zsh | .zshrc
+- name: zsh | ~/.zsh.d/.zshrc
   template:
     src: zsh/zshrc.j2
     dest: "/home/{{ hhwm_user }}/.zsh.d/.zshrc"
@@ -31,7 +31,7 @@
     group: "{{ hhwm_group }}"
     mode: '0600'
 
-- name: zsh | .zprofile
+- name: zsh | ~/.zsh.d/.zprofile
   template:
     src: zsh/zprofile.j2
     dest: "/home/{{ hhwm_user }}/.zsh.d/.zprofile"
@@ -39,7 +39,7 @@
     group: "{{ hhwm_group }}"
     mode: '0600'
 
-- name: zsh | .zlogin
+- name: zsh | ~/.zsh.d/.zlogin
   template:
     src: zsh/zlogin.j2
     dest: "/home/{{ hhwm_user }}/.zsh.d/.zlogin"
@@ -47,7 +47,7 @@
     group: "{{ hhwm_group }}"
     mode: '0600'
 
-- name: zsh | .zlogout
+- name: zsh | ~/.zsh.d/.zlogout
   template:
     src: zsh/zlogout.j2
     dest: "/home/{{ hhwm_user }}/.zsh.d/.zlogout"
@@ -55,7 +55,7 @@
     group: "{{ hhwm_group }}"
     mode: '0600'
 
-- name: zsh | templates
+- name: zsh | ~/.zsh.d/ templates
   template:
     src: "{{ item }}"
     dest: "/home/{{ hhwm_user }}/.zsh.d/{{ item | basename | splitext | first }}"

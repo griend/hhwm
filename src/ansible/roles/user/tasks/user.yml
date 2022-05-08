@@ -37,7 +37,7 @@
     group: root
     mode: '0660'
 
-- name: user | .gitconfig
+- name: user | ~/.gitconfig
   template:
     src: user/gitconfig.j2
     dest: "/home/{{ hhwm_user }}/.gitconfig"
@@ -45,7 +45,7 @@
     group: "{{ hhwm_group }}"
     mode: '0600'
 
-- name: user | .ssh/config
+- name: user | ~/.ssh/config
   template:
     force: no
     src: user/ssh_config.j2
