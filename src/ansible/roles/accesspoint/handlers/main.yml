@@ -5,6 +5,9 @@
 - name: netfilter-persistent
   command: netfilter-persistent save
 
+- name: systemctl daemon-reload
+  command: systemctl daemon-reload
+  
 - name: restart dhcpcd
   service:
     name: dhcpcd

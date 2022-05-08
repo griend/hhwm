@@ -8,7 +8,8 @@
     owner: root
     group: root
     mode: '0644'
-  notify: restart dhcpcd
+  notify:
+  - restart dhcpcd
 
 # enable IP forward
 - name: sysctl
@@ -18,7 +19,8 @@
     owner: root
     group: root
     mode: '0644'
-  notify: sysctl
+  notify:
+  - sysctl
 
 # sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 - name: iptables
@@ -27,7 +29,8 @@
     chain: POSTROUTING
     out_interface: eth0
     jump: MASQUERADE
-  notify: netfilter-persistent
+  notify:
+  - netfilter-persistent
 
 - name: dnsmasq
   template:
@@ -36,7 +39,19 @@
     owner: root
     group: root
     mode: '0644'
-  notify: restart dnsmasq
+  notify:
+  - restart dnsmasq
+
+- name: dnsmasq.service
+  template:
+    src: dnsmasq.service.j2
+    dest: /etc/systemd/system/dnsmasq.service
+    owner: root
+    group: root
+    mode: '0644'
+  notify: 
+  - systemctl daemon-reload
+  - restart dnsmasq
 
 - name: hostapd.service
   systemd:
@@ -49,9 +64,10 @@
 - name: hostapd
   template:
     src: hostapd.conf.j2
-    dest: /etc/hostapd/hostapd.conf
+    dest: /etc/hostapdhostapd.conf
     owner: root
     group: root
     mode: '0644'
-  notify: restart hostapd
+  notify:
+  - restart hostapd
   
