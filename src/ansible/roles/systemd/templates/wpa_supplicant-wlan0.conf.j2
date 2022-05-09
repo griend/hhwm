@@ -1,0 +1,10 @@
+{{ ansible_managed | comment }}
+ctrl_interface=DIR=/run/wpa_supplicant GROUP=netdev
+update_config=0
+country=NL
+
+network={
+    ssid="{{ hhwm_ssid }}"
+    # passphrase="{{ hhwm_passphrase }}"
+    psk={{ hhwm_psk }}
+}

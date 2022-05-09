@@ -16,6 +16,7 @@
   # Main
   roles:
     - setup
+    - user
   
   # Clean/Purge repository
   post_tasks:

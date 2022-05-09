@@ -1,0 +1,187 @@
+---
+#---------------------------------------------------------------
+# deinstall classic networking
+#---------------------------------------------------------------
+# pi@raspberrypi:~ $ sudo -Es   # if not already done
+# root@raspberrypi:~ # systemctl daemon-reload
+# root@raspberrypi:~ # systemctl disable --now ifupdown dhcpcd dhcpcd5 isc-dhcp-client isc-dhcp-common rsyslog
+# root@raspberrypi:~ # apt --autoremove purge ifupdown dhcpcd dhcpcd5 isc-dhcp-client isc-dhcp-common rsyslog
+# root@raspberrypi:~ # rm -r /etc/network /etc/dhcp
+
+# - name: systemctl daemon-reload
+#   command: systemctl daemon-reload
+
+# - name: Disable classic networking
+#   systemd:
+#     name: "{{ item }}"
+#     enabled: no
+#   loop:
+#     - ifupdown
+#     - dhcpcd
+#     - dhcpcd5
+#     - isc-dhcp-client
+#     - isc-dhcp-common
+#     - rsyslog
+#   ignore_errors: yes
+
+- name: Remove classic networking
+  apt:
+    name: "{{ item }}"
+    state: absent
+    purge: yes
+  loop:
+    - ifupdown
+    - dhcpcd
+    - dhcpcd5
+    - isc-dhcp-client
+    - isc-dhcp-common
+    - rsyslog
+  notify:
+    - reboot
+
+- name: Remove /etc/network /etc/dhcp
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/network
+    - /etc/dhcp
+
+# - name: Disable avahi-daemon libnss-mdns
+#   systemd:
+#     name: "{{ item }}"
+#     enabled: no
+#   loop:
+#     - avahi-daemon 
+#     - libnss-mdns
+#   ignore_errors: yes
+ 
+- name: Remove avahi-daemon libnss-mdns
+  apt:
+    name: "{{ item }}"
+    state: absent
+    purge: yes
+  loop:
+    - avahi-daemon 
+    - libnss-mdns
+  notify:
+    - reboot
+
+- name: Install libnss-resolve
+  apt:
+    name: libnss-resolve
+    state: present
+
+- name: Link /etc/resolv.conf
+  file:
+    state: link
+    src: /run/systemd/resolve/stub-resolv.conf 
+    dest: /etc/resolv.conf
+    force: yes
+
+- name: Hold packages
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop:
+    - avahi-daemon
+    - dhcpcd
+    - dhcpcd5
+    - ifupdown
+    - isc-dhcp-client
+    - isc-dhcp-common
+    - libnss-mdns
+    - openresolv 
+    - raspberrypi-net-mods
+    - rsyslog
+
+- name: Enable systemd-networkd.service systemd-resolved.service
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+  loop:
+    - systemd-networkd.service 
+    - systemd-resolved.service
+  notify:
+    - reboot
+
+# - name: /etc/systemd/network/10-wired.network
+#   copy:
+#     src: 10-wired.network
+#     dest: /etc/systemd/network/10-wired.network
+#     owner: root
+#     group: root
+#     mode: '0644'
+#   notify:
+#     - reboot
+
+- name: Remove /etc/systemd/network/10-wired.network
+  file:
+    path: /etc/systemd/network/10-wired.network
+    state: absent
+  notify:
+    - reboot
+
+- name: Create /etc/systemd/network/10-eth0.network
+  copy:
+    src: 10-eth0.network
+    dest: /etc/systemd/network/10-eth0.network
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - reboot
+
+- name: Create /etc/systemd/network/10-wlan0.network
+  copy:
+    src: 10-wlan0.network
+    dest: /etc/systemd/network/10-wlan0.network
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - reboot
+
+- name: Create /etc/wpa_supplicant/wpa_supplicant-wlan0.conf
+  template:
+    src: wpa_supplicant-wlan0.conf.j2
+    dest: /etc/wpa_supplicant/wpa_supplicant-wlan0.conf
+    owner: root
+    group: root
+    mode: '0600'
+  notify:
+    - reboot
+
+- name: Enable wpa_supplicant@wlan0.service
+  systemd:
+    name: wpa_supplicant@wlan0
+    enabled: "{{ hhwm_wlan0_enabled }}"
+  notify:
+    - reboot
+
+- name: Disable wpa_supplicant
+  systemd:
+    name: wpa_supplicant
+    enabled: no
+    state: stopped
+  notify:
+    - reboot
+
+- name: Remove /etc/wpa_supplicant/wpa_supplicant.conf
+  file:
+    path: /etc/wpa_supplicant/wpa_supplicant.conf
+    state: absent
+
+- name: Disable ssh.service
+  systemd:
+    name: ssh.service
+    enabled: no
+  notify:
+    - reboot
+
+- name: Enable ssh.socket
+  systemd:
+    name: ssh.socket
+    enabled: yes
+  notify:
+    - reboot

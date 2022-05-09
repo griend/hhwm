@@ -1,0 +1,11 @@
+#
+# This file is managed by Ansible.
+#
+[Match]
+Name=wlan0
+
+[Network]
+LLMNR=no
+LinkLocalAddressing=no
+MulticastDNS=yes
+DHCP=ipv4
