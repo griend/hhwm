@@ -23,4 +23,19 @@
     owner: root
     group: root
     mode: '0660'
-  notify: restart ssh
+  notify:
+    - restart ssh.socket
+
+- name: ssh | Enable ssh.socket
+  systemd:
+    name: ssh.socket
+    enabled: yes
+  notify:
+    - restart ssh.socket
+
+- name: ssh | Disable ssh.service
+  systemd:
+    name: ssh.service
+    enabled: no
+  notify:
+    - restart ssh.socket

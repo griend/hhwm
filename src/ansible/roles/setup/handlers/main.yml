@@ -2,7 +2,7 @@
 - name: reboot
   reboot:
 
-- name: restart ssh
+- name: restart ssh.socket
   service:
-    name: ssh
+    name: ssh.socket
     state: restarted

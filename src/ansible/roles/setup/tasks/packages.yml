@@ -1,4 +1,4 @@
 ---
 - name: packages | install
   package:
-    name: "{{ hhwm_packages }}"
+    name: "{{ hhwm_packages_install }}"

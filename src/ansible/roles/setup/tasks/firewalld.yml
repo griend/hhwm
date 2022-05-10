@@ -1,0 +1,16 @@
+---
+# - name: firewalld | rules
+#   firewalld:
+#     permanent: yes
+#     immediate: yes
+#     service: "{{ item }}"
+#     state: enabled
+#   loop:
+#     - ssh
+#     - dns
+
+- name: firewalld | firewalld.service
+  systemd:
+    name: firewalld.service
+    state: stopped
+    enabled: no

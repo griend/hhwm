@@ -8,70 +8,42 @@
 # root@raspberrypi:~ # apt --autoremove purge ifupdown dhcpcd dhcpcd5 isc-dhcp-client isc-dhcp-common rsyslog
 # root@raspberrypi:~ # rm -r /etc/network /etc/dhcp
 
-# - name: systemctl daemon-reload
-#   command: systemctl daemon-reload
-
-# - name: Disable classic networking
-#   systemd:
-#     name: "{{ item }}"
-#     enabled: no
-#   loop:
-#     - ifupdown
-#     - dhcpcd
-#     - dhcpcd5
-#     - isc-dhcp-client
-#     - isc-dhcp-common
-#     - rsyslog
-#   ignore_errors: yes
-
-- name: Remove classic networking
+- name: Remove packages
   apt:
-    name: "{{ item }}"
+    name: "{{ hhwm_packages_remove }}"
     state: absent
     purge: yes
-  loop:
-    - ifupdown
-    - dhcpcd
-    - dhcpcd5
-    - isc-dhcp-client
-    - isc-dhcp-common
-    - rsyslog
   notify:
     - reboot
 
-- name: Remove /etc/network /etc/dhcp
-  file:
-    path: "{{ item }}"
-    state: absent
-  loop:
-    - /etc/network
-    - /etc/dhcp
-
-# - name: Disable avahi-daemon libnss-mdns
-#   systemd:
-#     name: "{{ item }}"
-#     enabled: no
-#   loop:
-#     - avahi-daemon 
-#     - libnss-mdns
-#   ignore_errors: yes
- 
-- name: Remove avahi-daemon libnss-mdns
+- name: Install packages
   apt:
-    name: "{{ item }}"
-    state: absent
-    purge: yes
-  loop:
-    - avahi-daemon 
-    - libnss-mdns
-  notify:
-    - reboot
-
-- name: Install libnss-resolve
-  apt:
-    name: libnss-resolve
+    name: "{{ hhwm_packages_install }}"
     state: present
+  notify:
+    - reboot
 
+#---------------------------------------------------------------
+# Remove old configuration files
+#---------------------------------------------------------------
+- name: Remove /etc/dhcp
+  file:
+    path: /etc/dhcp
+    state: absent
+
+- name: Remove /etc/network
+  file:
+    path: /etc/network
+    state: absent
+
+- name: Remove /etc/wpa_supplicant/wpa_supplicant.conf
+  file:
+    path: /etc/wpa_supplicant/wpa_supplicant.conf
+    state: absent
+
+#---------------------------------------------------------------
+# Setup new configuration files
+#---------------------------------------------------------------
 - name: Link /etc/resolv.conf
   file:
     state: link
@@ -79,66 +51,48 @@
     dest: /etc/resolv.conf
     force: yes
 
-- name: Hold packages
-  dpkg_selections:
-    name: "{{ item }}"
-    selection: hold
-  loop:
-    - avahi-daemon
-    - dhcpcd
-    - dhcpcd5
-    - ifupdown
-    - isc-dhcp-client
-    - isc-dhcp-common
-    - libnss-mdns
-    - openresolv 
-    - raspberrypi-net-mods
-    - rsyslog
-
-- name: Enable systemd-networkd.service systemd-resolved.service
-  systemd:
-    name: "{{ item }}"
-    enabled: yes
-  loop:
-    - systemd-networkd.service 
-    - systemd-resolved.service
+- name: Create /etc/systemd/network/10-enX.network
+  copy:
+    src: 10-enX.network
+    dest: /etc/systemd/network/10-enX.network
+    owner: root
+    group: root
+    mode: '0644'
   notify:
     - reboot
 
-# - name: /etc/systemd/network/10-wired.network
-#   copy:
-#     src: 10-wired.network
-#     dest: /etc/systemd/network/10-wired.network
-#     owner: root
-#     group: root
-#     mode: '0644'
-#   notify:
-#     - reboot
+- name: Create /etc/systemd/network/10-wlX.network
+  copy:
+    src: 10-wlX.network
+    dest: /etc/systemd/network/10-wlX.network
+    owner: root
+    group: root
+    mode: '0644'
+  when: hhwm_wlan0_enabled == "yes"
+  notify:
+    - reboot
 
-- name: Remove /etc/systemd/network/10-wired.network
+- name: Remove /etc/systemd/network/10-wlX.network
   file:
-    path: /etc/systemd/network/10-wired.network
+    path: /etc/systemd/network/10-wlX.network
+    state: absent
+  when: hhwm_wlan0_enabled != "yes"
+  notify:
+    - reboot
+
+# rm -f /etc/systemd/network/73-usb-net-by-mac.link
+- name: Remove /etc/systemd/network/73-usb-net-by-mac.link
+  file:
+    path: /etc/systemd/network/73-usb-net-by-mac.link
     state: absent
   notify:
     - reboot
 
-- name: Create /etc/systemd/network/10-eth0.network
-  copy:
-    src: 10-eth0.network
-    dest: /etc/systemd/network/10-eth0.network
-    owner: root
-    group: root
-    mode: '0644'
-  notify:
-    - reboot
-
-- name: Create /etc/systemd/network/10-wlan0.network
-  copy:
-    src: 10-wlan0.network
-    dest: /etc/systemd/network/10-wlan0.network
-    owner: root
-    group: root
-    mode: '0644'
+# rm -f /etc/systemd/network/99-default.link
+- name: Remove /etc/systemd/network/99-default.link
+  file:
+    path: /etc/systemd/network/99-default.link
+    state: absent
   notify:
     - reboot
 
@@ -149,39 +103,51 @@
     owner: root
     group: root
     mode: '0600'
+  when: hhwm_wlan0_enabled == "yes"
   notify:
     - reboot
 
-- name: Enable wpa_supplicant@wlan0.service
+- name: Remove /etc/wpa_supplicant/wpa_supplicant-wlan0.conf
+  file:
+    path: /etc/wpa_supplicant/wpa_supplicant-wlan0.conf
+    state: absent
+  when: hhwm_wlan0_enabled != "yes"
+  notify:
+    - reboot
+
+- name: Disable wpa_supplicant.service
+  systemd:
+    name: wpa_supplicant
+    enabled: no
+    masked: yes
+    state: stopped
+  notify:
+    - reboot
+
+- name: Enable/Disable wpa_supplicant@wlan0.service
   systemd:
     name: wpa_supplicant@wlan0
     enabled: "{{ hhwm_wlan0_enabled }}"
   notify:
     - reboot
 
-- name: Disable wpa_supplicant
+- name: Enable systemd-networkd.service
   systemd:
-    name: wpa_supplicant
-    enabled: no
-    state: stopped
+    name: systemd-networkd.service
+    enabled: yes
   notify:
     - reboot
 
-- name: Remove /etc/wpa_supplicant/wpa_supplicant.conf
-  file:
-    path: /etc/wpa_supplicant/wpa_supplicant.conf
-    state: absent
-
-- name: Disable ssh.service
+- name: Enable systemd-resolved.service
   systemd:
-    name: ssh.service
-    enabled: no
+    name: systemd-resolved.service
+    enabled: yes
   notify:
     - reboot
 
-- name: Enable ssh.socket
+- name: Enable systemd-timesyncd.service
   systemd:
-    name: ssh.socket
+    name: systemd-timesyncd.service
     enabled: yes
   notify:
     - reboot

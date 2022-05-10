@@ -1,0 +1,9 @@
+---
+- hosts: rp01
+  tags: always
+  become: true
+
+  roles:
+  - setup
+  - user
+  - systemd

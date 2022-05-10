@@ -2,7 +2,7 @@
 # This file is managed by Ansible.
 #
 [Match]
-Name=wlan0
+Name=en*
 
 [Network]
 LLMNR=no

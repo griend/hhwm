@@ -25,3 +25,19 @@ hhwm_psk: !vault |
   30303933396164656531
 
 hhwm_wlan0_enabled: yes
+
+  
+hhwm_packages_remove:
+  # Classic networking
+  - ifupdown
+  - dhcpcd
+  - dhcpcd5
+  - isc-dhcp-client
+  - isc-dhcp-common
+  - rsyslog
+
+  - avahi-daemon 
+  - libnss-mdns
+
+hhwm_packages_install:
+  - libnss-resolve
