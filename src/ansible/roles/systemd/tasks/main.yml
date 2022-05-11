@@ -51,50 +51,50 @@
     dest: /etc/resolv.conf
     force: yes
 
-- name: Create /etc/systemd/network/10-enX.network
-  copy:
-    src: 10-enX.network
-    dest: /etc/systemd/network/10-enX.network
-    owner: root
-    group: root
-    mode: '0644'
-  notify:
-    - reboot
+# - name: Create /etc/systemd/network/10-enX.network
+#   copy:
+#     src: 10-enX.network
+#     dest: /etc/systemd/network/10-enX.network
+#     owner: root
+#     group: root
+#     mode: '0644'
+#   notify:
+#     - reboot
 
-- name: Create /etc/systemd/network/10-wlX.network
-  copy:
-    src: 10-wlX.network
-    dest: /etc/systemd/network/10-wlX.network
-    owner: root
-    group: root
-    mode: '0644'
-  when: hhwm_wlan0_enabled == "yes"
-  notify:
-    - reboot
+# - name: Create /etc/systemd/network/10-wlX.network
+#   copy:
+#     src: 10-wlX.network
+#     dest: /etc/systemd/network/10-wlX.network
+#     owner: root
+#     group: root
+#     mode: '0644'
+#   when: hhwm_wlan0_enabled == "yes"
+#   notify:
+#     - reboot
 
-- name: Remove /etc/systemd/network/10-wlX.network
-  file:
-    path: /etc/systemd/network/10-wlX.network
-    state: absent
-  when: hhwm_wlan0_enabled != "yes"
-  notify:
-    - reboot
+# - name: Remove /etc/systemd/network/10-wlX.network
+#   file:
+#     path: /etc/systemd/network/10-wlX.network
+#     state: absent
+#   when: hhwm_wlan0_enabled != "yes"
+#   notify:
+#     - reboot
 
-# rm -f /etc/systemd/network/73-usb-net-by-mac.link
-- name: Remove /etc/systemd/network/73-usb-net-by-mac.link
-  file:
-    path: /etc/systemd/network/73-usb-net-by-mac.link
-    state: absent
-  notify:
-    - reboot
+# # rm -f /etc/systemd/network/73-usb-net-by-mac.link
+# - name: Remove /etc/systemd/network/73-usb-net-by-mac.link
+#   file:
+#     path: /etc/systemd/network/73-usb-net-by-mac.link
+#     state: absent
+#   notify:
+#     - reboot
 
-# rm -f /etc/systemd/network/99-default.link
-- name: Remove /etc/systemd/network/99-default.link
-  file:
-    path: /etc/systemd/network/99-default.link
-    state: absent
-  notify:
-    - reboot
+# # rm -f /etc/systemd/network/99-default.link
+# - name: Remove /etc/systemd/network/99-default.link
+#   file:
+#     path: /etc/systemd/network/99-default.link
+#     state: absent
+#   notify:
+#     - reboot
 
 - name: Create /etc/wpa_supplicant/wpa_supplicant-wlan0.conf
   template:

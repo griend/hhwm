@@ -1,4 +1,9 @@
 ---
+- name: packages | remove
+  apt:
+    name: "{{ hhwm_packages_remove }}"
+
 - name: packages | install
-  package:
+  apt:
     name: "{{ hhwm_packages_install }}"
+    install_recommends: yes

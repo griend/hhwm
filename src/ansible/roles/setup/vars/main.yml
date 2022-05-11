@@ -1,0 +1,16 @@
+---
+hhwm_packages_remove:
+  # nothing
+  
+hhwm_packages_install:
+  - apt-transport-https
+  - btrfs-progs
+  - curl
+  - git
+  - gnupg2
+  - htop
+  - tmux
+  - vim-nox
+
+  - firewalld
+  - python3-firewall

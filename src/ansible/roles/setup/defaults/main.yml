@@ -1,13 +1,3 @@
 ---
-hhwm_packages_install:
-  - apt-transport-https
-  - btrfs-progs
-  - curl
-  - git
-  - gnupg2
-  - htop
-  - tmux
-  - vim-nox
-
-  - firewalld
-  - python3-firewall
+hhwm_static_ip: 'no'
+hhwm_wlan0_enabled: 'no'

@@ -1,0 +1,9 @@
+---
+- name: static_ip | Create /etc/systemd/network/10-wired.network
+  template:
+    src: static_ip/10-wired.network.j2
+    dest: /etc/systemd/network/10-wired.network
+    owner: root
+    group: root
+    mode: '0644'
+  when: hhwm_static_ip != 'no'

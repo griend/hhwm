@@ -1,8 +1,9 @@
 ---
-- hosts: rp01.kade3.home
+- hosts: all
   tags: always
   become: true
   roles:
     - setup
     - user
     - systemd
+

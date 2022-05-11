@@ -1,0 +1,17 @@
+[Match]
+Name=eth0
+
+[Network]
+{% if hhwm_static_ip != 'no' %}
+LLMNR=no
+LinkLocalAddressing=no
+MulticastDNS=yes
+Address={{ hhwm_static_ip }}/24
+Gateway=192.168.128.1
+DNS=192.168.128.2
+{% else %}
+LLMNR=no
+LinkLocalAddressing=no
+MulticastDNS=yes
+DHCP=ipv4
+{% endif %}
