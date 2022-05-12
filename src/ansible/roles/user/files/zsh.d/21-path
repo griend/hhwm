@@ -1,4 +1,4 @@
-{{ ansible_managed | comment }}
+# This file is managed by Ansible.
 
 # Only unique paths
 typeset -U path

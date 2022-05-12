@@ -1,18 +1,18 @@
 # Does not work :-(
 ---
-- name: apt | Create /etc/apt/apt.conf.d/02periodic
-  copy:
-    src: apt/02periodic
-    dest: /etc/apt/apt.conf.d/02periodic
-    owner: root
-    group: root
-    mode: '0644'
+# - name: apt | Create /etc/apt/apt.conf.d/02periodic
+#   copy:
+#     src: apt/02periodic
+#     dest: /etc/apt/apt.conf.d/02periodic
+#     owner: root
+#     group: root
+#     mode: '0644'
  
-- name: apt | Create /etc/apt/apt.conf.d/20auto-upgrades
-  copy:
-    src: apt/20auto-upgrades
-    dest: /etc/apt/apt.conf.d/20auto-upgrades
-    owner: root
-    group: root
-    mode: '0644'
+# - name: apt | Create /etc/apt/apt.conf.d/20auto-upgrades
+#   copy:
+#     src: apt/20auto-upgrades
+#     dest: /etc/apt/apt.conf.d/20auto-upgrades
+#     owner: root
+#     group: root
+#     mode: '0644'
  

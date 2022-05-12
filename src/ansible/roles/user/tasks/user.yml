@@ -7,6 +7,7 @@
 - name: user | create user
   user:
     name: "{{ hhwm_user }}"
+    password: "{{ hhwm_password }}"
     group: "{{ hhwm_group }}"
     groups:
       - adm

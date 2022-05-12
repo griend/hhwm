@@ -1,4 +1,4 @@
-{{ ansible_managed | comment }}
+# This file is managed by Ansible.
 
 alias ..='cd ..'
 alias ...='cd ../../../'

@@ -1,7 +1,20 @@
 ---
 hhwm_packages_remove:
-  # nothing
+  - firewalld
+  - python3-firewall
+
+  # Classic networking
+  - ifupdown
+  - dhcpcd
+  - dhcpcd5
+  - isc-dhcp-client
+  - isc-dhcp-common
+  - rsyslog
+
+  - avahi-daemon 
+  - libnss-mdns
   
+
 hhwm_packages_install:
   - apt-transport-https
   - btrfs-progs
@@ -9,8 +22,12 @@ hhwm_packages_install:
   - git
   - gnupg2
   - htop
+  - iotop
   - tmux
   - vim-nox
 
-  - firewalld
-  - python3-firewall
+  # - firewalld
+  # - python3-firewall
+
+  # Classic networking
+  - libnss-resolve

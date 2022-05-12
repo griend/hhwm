@@ -2,7 +2,7 @@
 # This file is managed by Ansible.
 #
 [Match]
-Name=wl*
+Name=w*
 
 [Network]
 LLMNR=no

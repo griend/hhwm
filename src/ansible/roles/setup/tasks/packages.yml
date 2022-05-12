@@ -2,6 +2,7 @@
 - name: packages | remove
   apt:
     name: "{{ hhwm_packages_remove }}"
+    state: absent
 
 - name: packages | install
   apt:

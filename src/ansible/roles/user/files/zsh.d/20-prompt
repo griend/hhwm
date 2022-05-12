@@ -1,4 +1,4 @@
-{{ ansible_managed | comment }}
+# This file is managed by Ansible.
 
 # PROMPT='%(?.%F{green}V.%F{red}?%?)%f %B%F{240}%1~%f%b %# '
 

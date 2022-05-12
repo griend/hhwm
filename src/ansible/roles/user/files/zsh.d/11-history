@@ -1,4 +1,4 @@
-{{ ansible_managed | comment }}
+# This file is managed by Ansible.
 
 if [ ! -d ~/.cache/zsh ] ; then
 	mkdir -p ~/.cache/zsh
