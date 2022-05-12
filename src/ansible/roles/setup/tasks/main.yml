@@ -8,3 +8,8 @@
 - include_tasks: networkd.yml
 - include_tasks: ssh.yml
 - include_tasks: timezone.yml
+
+- include_tasks: mount/rp02.yml
+  when: inventory_hostname == 'rp02.kade3.dev'
+- include_tasks: mount/rp04.yml
+  when: inventory_hostname == 'rp04.kade3.dev'

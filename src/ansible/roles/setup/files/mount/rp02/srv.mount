@@ -1,0 +1,14 @@
+[Unit]
+Description=Service directory (/srv)
+DefaultDependencies=no
+Conflicts=umount.target
+Before=local-fs.target umount.target
+
+[Mount]
+What=/dev/disk/by-uuid/ba7da425-5399-4f20-8513-42be8b6ca2d6
+Where=/srv
+Type=btrfs
+Options=defaults
+
+[Install]
+WantedBy=multi-user.target

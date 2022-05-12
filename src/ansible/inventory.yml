@@ -21,5 +21,5 @@ all:
     raspberry_pi_400:
       hosts:
         rp04.kade3.dev:
-          ansible_host: 192.168.128.236
+          ansible_host: 192.168.128.194
 

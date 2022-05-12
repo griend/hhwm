@@ -6,3 +6,7 @@
   service:
     name: ssh.socket
     state: restarted
+
+- name: systemd reload
+  systemd:
+    daemon_reload: yes

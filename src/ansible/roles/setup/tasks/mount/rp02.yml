@@ -1,0 +1,34 @@
+#
+# /home is a btrfs on a USB drive
+#
+---
+- name: mount/rp02 | Create /etc/systemd/system/srv.mount
+  copy:
+    src: mount/rp02/srv.mount
+    dest: /etc/systemd/system/srv.mount
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - systemd reload
+
+- name: mount/rp02 | Create /etc/systemd/system/srv.automount
+  copy:
+    src: mount/rp02/srv.automount
+    dest: /etc/systemd/system/srv.automount
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - systemd reload
+
+- name: mount/rp02 | systemd srv.mount
+  systemd:
+    name: srv.mount
+    enabled: no
+
+- name: mount/rp02 | systemd srv.automount
+  systemd:
+    name: srv.automount
+    enabled: yes
+    state: started

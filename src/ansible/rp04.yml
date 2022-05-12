@@ -1,0 +1,8 @@
+---
+- hosts: rp04.kade3.dev
+  tags: always
+  become: true
+
+  roles:
+  - setup
+  - user
