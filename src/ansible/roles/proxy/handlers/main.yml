@@ -1,0 +1,10 @@
+---
+- name: restart squid.service
+  service:
+    name: squid.service
+    state: restarted
+
+- name: restart nginx.service
+  service:
+    name: nginx.service
+    state: restarted

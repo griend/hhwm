@@ -5,5 +5,10 @@
   roles:
     - setup
     - user
-    - systemd
 
+- hosts: rp02.kade3.dev
+  tags: always
+  become: true
+  roles:
+    - proxy
+ 

@@ -1,0 +1,56 @@
+---
+- name: packages | remove
+  apt:
+    name: "{{ hhwm_packages_remove }}"
+    state: absent
+
+- name: packages | install
+  apt:
+    name: "{{ hhwm_packages_install }}"
+    install_recommends: yes
+
+- name: /srv/squid
+  file:
+    path: /srv/squid
+    state: directory
+    owner: proxy
+    group: proxy
+    mode: '0775'
+
+- name: Create /etc/squid/squid.conf
+  copy:
+    src: squid.conf
+    dest: /etc/squid/squid.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - restart squid.service
+
+- name: /srv/web
+  file:
+    path: /srv/web
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+# TODO
+- name: Create /srv/web/proxy.pac
+  copy:
+    src: proxy.pac
+    dest: /srv/web/wpad.dat
+    owner: root
+    group: root
+    mode: '0644'
+
+# TODO
+- name: Create /etc/nginx/sites-enabled/wpad.kade3.dev
+  copy:
+    src: nginx-wpad.conf
+    dest: /etc/nginx/sites-enabled/wpad.kade3.dev
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - restart nginx.service

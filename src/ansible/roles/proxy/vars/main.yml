@@ -1,0 +1,8 @@
+---
+hhwm_packages_remove:
+  # empty  
+
+hhwm_packages_install:
+  - squid
+  - nginx
+  

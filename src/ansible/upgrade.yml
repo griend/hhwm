@@ -1,0 +1,29 @@
+---
+- hosts: all
+  tags: always
+  become: true
+
+  # Update repository
+  tasks:
+  - name: update/upgrade package cache
+    tags: always
+    apt:
+      update_cache: yes
+      upgrade: dist
+    changed_when: false
+    when: ansible_distribution == "Debian"
+
+  # Clean/Purge repository
+  - name: cleanup package cache
+    tags: always
+    apt:
+      autoclean: yes
+    changed_when: false
+    when: ansible_distribution == "Debian"
+
+  - name: autoremove orphan packages
+    tags: always
+    apt:
+      autoremove: yes
+      purge: yes
+    when: ansible_distribution == "Debian"

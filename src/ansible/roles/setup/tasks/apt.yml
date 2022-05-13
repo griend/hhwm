@@ -1,0 +1,7 @@
+- name: apt | /etc/apt/apt.conf.d/02proxy
+  copy:
+    src: apt/02proxy
+    dest: /etc/apt/apt.conf.d/02proxy
+    owner: root
+    group: root
+    mode: '0644'

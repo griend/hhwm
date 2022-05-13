@@ -5,7 +5,7 @@ Conflicts=umount.target
 Before=local-fs.target umount.target
 
 [Mount]
-What=/dev/disk/by-uuid/ba7da425-5399-4f20-8513-42be8b6ca2d6
+What=/dev/disk/by-uuid/62adc06c-2d37-4177-8600-7014f8163bed
 Where=/srv
 Type=btrfs
 Options=defaults

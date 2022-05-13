@@ -1,0 +1,6 @@
+#
+# This file is managed by Ansible.
+#
+
+Acquire::http::Proxy "http://192.168.128.3:3128";
+Acquire::https::Proxy "http://192.168.128.3:3128";
