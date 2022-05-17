@@ -5,9 +5,3 @@ ff02::1		ip6-allnodes
 ff02::2		ip6-allrouters
 
 127.0.1.1	{{ inventory_hostname | lower }}  {{ inventory_hostname.split('.')[0] | lower }}
-
-{% for item in play_hosts %}
-{% if item.lower() != inventory_hostname.lower() %}
-{{ hostvars[item]['ansible_host'] }}    {{ item |lower }}  {{ item.split('.')[0] | lower }}
-{% endif %}
-{% endfor %}
