@@ -1,0 +1,9 @@
+---
+- hosts: rp05.kade3.dev
+  tags: always
+  become: true
+
+  roles:
+  - setup
+  - user
+

@@ -6,9 +6,34 @@
     - setup
     - user
 
+  # Update repository
+  pre_tasks:
+    - name: update/upgrade package cache
+      tags: always
+      apt:
+        update_cache: yes
+        upgrade: dist
+      changed_when: false
+      when: ansible_distribution == "Debian"
+
+  # Clean/Purge repository
+  post_tasks:
+    - name: cleanup package cache
+      tags: always
+      apt:
+        autoclean: yes
+      changed_when: false
+      when: ansible_distribution == "Debian"
+
+    - name: autoremove orphan packages
+      tags: always
+      apt:
+        autoremove: yes
+        purge: yes
+      when: ansible_distribution == "Debian"
+
 - hosts: rp02.kade3.dev
   tags: always
   become: true
   roles:
     - proxy
- 

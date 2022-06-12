@@ -19,7 +19,10 @@ all:
       hosts:
         rp03.kade3.dev:
           ansible_host: 192.168.128.156
+        rp05.kade3.dev:
+          ansible_host: 192.168.128.215
     raspberry_pi_400:
       hosts:
         rp04.kade3.dev:
           ansible_host: 192.168.128.194
+
