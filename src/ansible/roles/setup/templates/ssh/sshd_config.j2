@@ -41,5 +41,8 @@ PidFile /var/run/sshd.pid
 MaxStartups 10:30:100
 #ChrootDirectory none
 
+# gpg-agent
+StreamLocalBindUnlink yes
+
 AcceptEnv LANG LC_*
 Subsystem	sftp	/usr/lib/openssh/sftp-server

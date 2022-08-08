@@ -58,6 +58,8 @@
 #
 # Import public GPG key
 #
+# ToDo: use gpg --recv-keys 0xDEAD...
+#
 - name: user | check public GPG key
   become: yes
   become_user: "{{ hhwm_user }}"
